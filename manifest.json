@@ -1,0 +1,22 @@
+{
+  "name": "Sistema Motores",
+  "short_name": "Motores",
+  "description": "Sistema de Documentacion de Motores ",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#6200EE",
+  "theme_color": "#6200EE",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icono.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icono.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
