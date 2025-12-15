@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#6200EE">
+  <meta name="description" content="Sistema de Documentación Técnica para Agujas Enclavamientos">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Agujas Enclavamientos - Sistema de Documentación</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ============================================ */
+    /* IFRAME CONTAINER - FULLSCREEN */
+    /* ============================================ */
+    .iframe-container {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .iframe-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      overflow: hidden;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ============================================ */
+    /* LOADING STATE */
+    /* ============================================ */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 0.3s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-content {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #E0E0E0;
+      border-top-color: #6200EE;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: #757575;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+  
+</head>
+
+<body>
+  <!-- ============================================ -->
+  <!-- IFRAME CONTAINER - SIN HEADER NI FOOTER -->
+  <!-- ============================================ -->
+  <div class="iframe-container">
+    <div class="iframe-wrapper">
+      <!-- LOADING STATE -->
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+          <div class="spinner"></div>
+          <div class="loading-text">Cargando aplicación...</div>
+        </div>
+      </div>
+
+      <!-- IFRAME - REEMPLAZAR URL CON TU ENLACE DE GOOGLE APPS SCRIPT -->
+      <iframe 
+        id="appIframe"
+        src="https://script.google.com/macros/s/AKfycbwONL0hthfAcL6tEbcU0v7yPf1nN4ZfUPzIh1nfTi4Bry2DG3nA74RxaDuvled3a-Wjew/exec"
+        title="Aplicación de Agujas Enclavamientos"
+        allow="camera; geolocation"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- JAVASCRIPT -->
+  <!-- ============================================ -->
+  <script>
+    // ==================== OCULTAR LOADING AL CARGAR IFRAME ====================
+    const iframe = document.getElementById('appIframe');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    iframe.addEventListener('load', function() {
+      setTimeout(() => {
+        loadingOverlay.classList.add('hidden');
+      }, 500);
+    });
+
+    // ==================== MANEJO DE ERRORES ====================
+    iframe.addEventListener('error', function() {
+      loadingOverlay.querySelector('.loading-text').textContent = 'Error al cargar la aplicación';
+      loadingOverlay.querySelector('.spinner').style.display = 'none';
+    });
+
+    // ==================== COMUNICACIÓN CON IFRAME (OPCIONAL) ====================
+    window.addEventListener('message', function(event) {
+      console.log('Mensaje recibido del iframe:', event.data);
+      
+      if (event.data === 'app-ready') {
+        console.log('✅ Aplicación lista');
+      }
+    });
+  </script>
+</body>
+</html>
